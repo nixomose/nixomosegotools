@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	DEBUG = iota
-	INFO  = iota
-	ERROR = iota
+	DEBUG = 0
+	INFO  = 200
+	ERROR = 500
 )
 
 type Nixomosetools_logger struct {
