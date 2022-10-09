@@ -13,7 +13,7 @@ import (
 const DEFAULT_ERROR_CODE int = 1
 
 type Ret interface {
-	Error() error
+	Error() string
 	Get_errcode() int
 	Get_errmsg() string
 }
@@ -70,7 +70,7 @@ func ErrorWithCode(logger_in *Nixomosetools_logger, code int, errmsg ...interfac
 	return ret
 }
 
-func (this *RetInstance) log() {
+func (this RetInstance) log() {
 	if this.logged {
 		return
 	}
@@ -83,11 +83,11 @@ func (this *RetInstance) log() {
 	// linter says this is pointless, not sure why. this.logged = true
 }
 
-func (this *RetInstance) Get_errcode() int {
+func (this RetInstance) Get_errcode() int {
 	return this.errorcode
 }
 
-func (this *RetInstance) Get_errmsg() string {
+func (this RetInstance) Get_errmsg() string {
 	return this.errmsg
 }
 
@@ -100,6 +100,7 @@ func (this *RetInstance) Set_errmsg(m string) {
 }
 
 // to be an error as well
-func (this *RetInstance) Error() string {
+
+func (this RetInstance) Error() string {
 	return this.Get_errmsg()
 }
