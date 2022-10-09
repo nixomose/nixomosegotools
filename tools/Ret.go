@@ -1,15 +1,19 @@
 // SPDX-License-Identifier: LGPL-2.1
 // Copyright (C) 2021-2022 stu mark
 
+// Package tools has a package comment to satisfy the static checker, complete with capital P and everything.
 package tools
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // 1/19/22 replacing SUCCESS with nil. const SUCCESS_CODE int = 0
+
 const DEFAULT_ERROR_CODE int = 1
 
 type Ret interface {
-	Error() string
+	Error() error
 	Get_errcode() int
 	Get_errmsg() string
 }
@@ -20,6 +24,10 @@ type RetInstance struct {
 	logged    bool
 	errorcode int
 }
+
+// verify that retinstance implements error
+var _ error = &RetInstance{}
+var _ error = (*RetInstance)(nil)
 
 //  1/19/22 success has been replaced with nil
 // func Success() Ret {
@@ -62,7 +70,7 @@ func ErrorWithCode(logger_in *Nixomosetools_logger, code int, errmsg ...interfac
 	return ret
 }
 
-func (this RetInstance) log() {
+func (this *RetInstance) log() {
 	if this.logged {
 		return
 	}
@@ -75,23 +83,23 @@ func (this RetInstance) log() {
 	// linter says this is pointless, not sure why. this.logged = true
 }
 
-func (this RetInstance) Get_errcode() int {
+func (this *RetInstance) Get_errcode() int {
 	return this.errorcode
 }
 
-func (this RetInstance) Get_errmsg() string {
+func (this *RetInstance) Get_errmsg() string {
 	return this.errmsg
 }
 
-func (this RetInstance) Set_errcode(e int) {
+func (this *RetInstance) Set_errcode(e int) {
 	this.errorcode = e
 }
 
-func (this RetInstance) Set_errmsg(m string) {
+func (this *RetInstance) Set_errmsg(m string) {
 	this.errmsg = m
 }
 
 // to be an error as well
-func (this RetInstance) Error() string {
+func (this *RetInstance) Error() string {
 	return this.Get_errmsg()
 }
